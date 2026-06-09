@@ -9,10 +9,12 @@
         "pg": "^8.11.3"
     },
     "devDependencies": {
-        "eslint": "^8.57.0"
+        "eslint": "^8.57.0",
+        "jest": "^29.7.0"
     },
     "scripts": {
-        "lint": "eslint ../game/src ../server --ext .js"
+        "lint": "eslint ../game/src ../server --ext .js",
+        "test": "jest"
     },
     "license": "MIT"
 }

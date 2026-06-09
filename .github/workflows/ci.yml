@@ -29,3 +29,8 @@ jobs:
       run: |
         cd server
         npm run lint
+
+    - name: Run Tests
+      run: |
+        cd server
+        npm test
