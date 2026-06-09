@@ -28,6 +28,22 @@ Para o jogo em rede, você precisa iniciar o servidor:
 
 O servidor será iniciado na porta `55555`. Abra o navegador em `http://localhost:55555`. Ambos os jogadores devem inserir o mesmo nome de jogo para se conectarem.
 
+### Execução via Docker (Desenvolvimento com Hot-Reload)
+
+Para rodar o ambiente de desenvolvimento utilizando Docker com suporte a hot-reload ativo, primeiro construa a imagem na raiz do projeto:
+
+```bash
+docker build -t mkjs-dev .
+```
+
+Em seguida, inicie o container mapeando os diretórios locais para dentro do container para que as alterações reflitam imediatamente:
+
+```bash
+docker run -p 55555:55555 -v $(pwd)/server:/app/server -v $(pwd)/game:/app/game mkjs-dev
+```
+
+O servidor estará disponível em `http://localhost:55555` e qualquer mudança no código de `server` ou `game` reiniciará o serviço automaticamente.
+
 ---
 
 # Configuração Técnica
