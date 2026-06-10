@@ -4,12 +4,13 @@
     "author": "Minko Gechev @mgechev",
     "description": "Node.js server for mk.js",
     "dependencies": {
-        "express": "3.x.x",
-        "socket.io": "0.9.x",
+        "express": "^4.19.2",
+        "socket.io": "^4.7.5",
         "pg": "^8.11.3"
     },
     "devDependencies": {
         "eslint": "^8.57.0",
+        "eslint-plugin-security": "^3.0.0",
         "fast-check": "^3.15.0",
         "jest": "^29.7.0"
     },

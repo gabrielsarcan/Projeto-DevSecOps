@@ -1,7 +1,7 @@
 var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
-    io = require('socket.io').listen(server),
+    io = require('socket.io')(server),
     GameCollection = require('./games.js').GameCollection,
     games = new GameCollection(),
     { Client } = require('pg');
@@ -24,9 +24,7 @@ dbClient.connect()
   .then(() => console.log('games_history table ready'))
   .catch(err => console.error('PostgreSQL connection error:', err));
 
-app.configure(function () {
-  app.use(express.static(__dirname + '/../game'));
-});
+app.use(express.static(__dirname + '/../game'));
 
 server.listen(55555);
 
