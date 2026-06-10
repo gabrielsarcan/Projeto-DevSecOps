@@ -23,10 +23,15 @@ jobs:
         cd server
         npm install
 
-    - name: Run Linter
+    - name: Run Linter (and SAST)
       run: |
         cd server
         npm run lint
+
+    - name: Run SCA (npm audit)
+      run: |
+        cd server
+        npm audit --audit-level=high
 
     - name: Run Tests
       run: |
