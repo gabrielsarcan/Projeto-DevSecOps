@@ -12,12 +12,13 @@ COPY --chown=root:root --chmod=755 server/package*.json ./server/
 # Instala as dependências
 RUN cd server && npm install
 
-# Copia todo o código do projeto para o container
-COPY --chown=root:root --chmod=755 . .
+# Copia o código do projeto de forma explícita para o container, evitando globbing desnecessário
+COPY --chown=root:root --chmod=755 server/ ./server/
+COPY --chown=root:root --chmod=755 game/ ./game/
 
 # Altera a propriedade da pasta /app para o usuário 'node'
-# RUN chown -R node:node /app # Probably not needed if we want immutability, but nodemon or the app might need write access?
-# Actually if we want immutability, it's better to keep files owned by root. Let's see if the app requires write access.
+# RUN chown -R node:node /app # Probably not needed if we want immutability, but nodemon ou a app podem precisar?
+# Para manter o princípio de imutabilidade, é melhor que os arquivos pertençam ao root.
 
 # Muda para o usuário 'node' (não-root) para maior segurança na execução
 USER node
