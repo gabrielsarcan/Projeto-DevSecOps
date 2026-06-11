@@ -23,10 +23,15 @@ jobs:
         cd server
         npm install
 
-    - name: Run Linter (and SAST)
+    - name: Run Linter
       run: |
         cd server
         npm run lint
+
+    - name: Run SAST (Semgrep)
+      uses: returntocorp/semgrep-action@v1
+      with:
+        config: "p/nodejs"
 
     - name: Run SCA (npm audit)
       run: |
