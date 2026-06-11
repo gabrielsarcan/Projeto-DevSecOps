@@ -74,6 +74,7 @@ function GameCollection() {
 
 GameCollection.prototype.getGame = function (game) {
   if (typeof game !== 'string' && typeof game !== 'number') return undefined;
+  if (!Object.prototype.hasOwnProperty.call(this._games, game)) return undefined;
   return this._games[game];
 };
 
