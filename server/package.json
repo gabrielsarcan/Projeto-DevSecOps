@@ -16,7 +16,7 @@
     },
     "scripts": {
         "lint": "eslint ../game/src ../server --ext .js",
-        "test": "jest"
+        "test": "jest --coverage"
     },
     "license": "MIT"
 }
