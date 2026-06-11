@@ -13,14 +13,14 @@ RUN chown -R node:node /app
 USER node
 
 # Copia os arquivos de dependência do servidor primeiro
-COPY --chown=node:node server/package*.json ./server/
+COPY --chown=node:node --chmod=555 server/package*.json ./server/
 
 # Instala as dependências (ajustando para versões antigas se necessário)
 # O uso do --legacy-peer-deps pode ajudar com pacotes antigos no Node 18
 RUN cd server && npm install
 
 # Copia todo o código do projeto para o container
-COPY --chown=node:node . .
+COPY --chown=node:node --chmod=555 . .
 
 # Expõe a porta que o servidor utiliza
 EXPOSE 55555
