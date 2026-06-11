@@ -1,0 +1,8 @@
+Dockerfile
+.dockerignore
+nginx.conf
+.env
+.env.*
+.git
+.gitignore
+*.md
