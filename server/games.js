@@ -73,10 +73,12 @@ function GameCollection() {
 }
 
 GameCollection.prototype.getGame = function (game) {
+  if (typeof game !== 'string' && typeof game !== 'number') return undefined;
   return this._games[game];
 };
 
 GameCollection.prototype.createGame = function (id) {
+  if (typeof id !== 'string' && typeof id !== 'number') return false;
   if (this._games[id]) {
     return false;
   }
@@ -86,6 +88,7 @@ GameCollection.prototype.createGame = function (id) {
 };
 
 GameCollection.prototype.removeGame = function (id) {
+  if (typeof id !== 'string' && typeof id !== 'number') return false;
   if (this._games[id]) {
     delete this._games[id];
     return true;
