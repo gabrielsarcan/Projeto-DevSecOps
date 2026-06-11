@@ -1,0 +1,11 @@
+Dockerfile
+.dockerignore
+node_modules
+coverage
+*.test.js
+*.fuzz.test.js
+.env
+.env.*
+.git
+.gitignore
+*.md

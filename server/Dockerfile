@@ -10,7 +10,8 @@ COPY package*.json ./
 RUN npm install --omit=dev
 
 # Copia o código fonte do servidor
-COPY . .
+COPY server.js ./
+COPY games.js ./
 
 # Stage 2: Production
 FROM node:18-alpine
