@@ -30,4 +30,28 @@ O trabalho está dividido em 10 etapas, cada uma valendo **1,0 ponto**. O foco �
 *   **Modernização:** É responsabilidade do aluno atualizar o `package.json` e as dependências do servidor para garantir compatibilidade com as versões mais recentes do Node.js.
 *   **Documentação:** O `README.md` final deve conter o passo a passo de como subir o ambiente de desenvolvimento e como visualizar o ambiente de produção.
 
+## Como Executar o Projeto
+
+### Ambiente de Desenvolvimento (Hot-Reload)
+
+Para rodar o ambiente de desenvolvimento utilizando o Docker com suporte a hot-reload e banco de dados PostgreSQL integrado:
+
+1. Certifique-se de que possui o [Docker e Docker Compose](https://docs.docker.com/compose/install/) instalados.
+2. Na raiz do projeto, execute o comando:
+   ```bash
+   docker compose up --build
+   ```
+3. O servidor estará disponível em `http://localhost:55555`. Qualquer alteração no código do backend (`server/`) ou frontend (`game/`) irá recarregar automaticamente.
+
+### Ambiente de Produção (Nginx e Node Alpine)
+
+Para visualizar o projeto em um ambiente otimizado para produção, onde o frontend é servido via **Nginx** (porta 80) e o backend roda no Node usando Alpine Linux:
+
+1. Na raiz do projeto, execute o docker-compose específico de produção:
+   ```bash
+   docker compose -f docker-compose.prod.yml up --build -d
+   ```
+2. O jogo em produção (Frontend via Nginx) estará disponível em `http://localhost`.
+3. O backend em produção responderá em `http://localhost:55555`.
+
 Boa sorte!
