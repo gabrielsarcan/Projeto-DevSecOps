@@ -6,21 +6,21 @@ WORKDIR /app
 # Instala o nodemon globalmente para permitir o hot-reload
 RUN npm install -g nodemon
 
-# Altera a propriedade da pasta /app para o usuário 'node'
-RUN chown -R node:node /app
-
-# Muda para o usuário 'node' (não-root) para maior segurança
-USER node
-
 # Copia os arquivos de dependência do servidor primeiro
-COPY --chown=node:node --chmod=555 server/package*.json ./server/
+COPY --chown=root:root --chmod=755 server/package*.json ./server/
 
-# Instala as dependências (ajustando para versões antigas se necessário)
-# O uso do --legacy-peer-deps pode ajudar com pacotes antigos no Node 18
+# Instala as dependências
 RUN cd server && npm install
 
 # Copia todo o código do projeto para o container
-COPY --chown=node:node --chmod=555 . .
+COPY --chown=root:root --chmod=755 . .
+
+# Altera a propriedade da pasta /app para o usuário 'node'
+# RUN chown -R node:node /app # Probably not needed if we want immutability, but nodemon or the app might need write access?
+# Actually if we want immutability, it's better to keep files owned by root. Let's see if the app requires write access.
+
+# Muda para o usuário 'node' (não-root) para maior segurança na execução
+USER node
 
 # Expõe a porta que o servidor utiliza
 EXPOSE 55555
