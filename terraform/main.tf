@@ -528,10 +528,13 @@ resource "kubernetes_ingress_v1" "mkjs" {
     }
 
     annotations = {
-      "nginx.ingress.kubernetes.io/proxy-read-timeout"      = "3600"
-      "nginx.ingress.kubernetes.io/proxy-send-timeout"      = "3600"
-      "nginx.ingress.kubernetes.io/proxy-http-version"      = "1.1"
-      "nginx.ingress.kubernetes.io/configuration-snippet"   = <<-EOT
+      "cert-manager.io/cluster-issuer"                       = "letsencrypt-prod"
+      "nginx.ingress.kubernetes.io/ssl-redirect"             = "true"
+      "nginx.ingress.kubernetes.io/force-ssl-redirect"       = "true"
+      "nginx.ingress.kubernetes.io/proxy-read-timeout"       = "3600"
+      "nginx.ingress.kubernetes.io/proxy-send-timeout"       = "3600"
+      "nginx.ingress.kubernetes.io/proxy-http-version"       = "1.1"
+      "nginx.ingress.kubernetes.io/configuration-snippet"    = <<-EOT
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
       EOT
@@ -540,6 +543,11 @@ resource "kubernetes_ingress_v1" "mkjs" {
 
   spec {
     ingress_class_name = "nginx"
+
+    tls {
+      hosts       = [var.ingress_host]
+      secret_name = "mkjs-tls"
+    }
 
     rule {
       host = var.ingress_host

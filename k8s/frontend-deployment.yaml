@@ -23,7 +23,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: frontend
-          image: mkjs-frontend:latest
+          image: ghcr.io/gabrielsarcan/mkjs-frontend:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

@@ -19,13 +19,13 @@ variable "namespace" {
 variable "frontend_image" {
   description = "Imagem Docker do frontend"
   type        = string
-  default     = "mkjs-frontend:latest"
+  default     = "ghcr.io/gabrielsarcan/mkjs-frontend:latest"
 }
 
 variable "backend_image" {
   description = "Imagem Docker do backend"
   type        = string
-  default     = "mkjs-backend:latest"
+  default     = "ghcr.io/gabrielsarcan/mkjs-backend:latest"
 }
 
 variable "postgres_image" {

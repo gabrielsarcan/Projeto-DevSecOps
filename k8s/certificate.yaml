@@ -1,0 +1,18 @@
+# Certificado TLS para o domínio da aplicação.
+# O cert-manager irá automaticamente solicitar e renovar o certificado
+# via Let's Encrypt utilizando o ClusterIssuer configurado.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mkjs-tls
+  namespace: mkjs
+  labels:
+    app.kubernetes.io/part-of: mkjs
+    app.kubernetes.io/component: tls
+spec:
+  secretName: mkjs-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - mkjs.local

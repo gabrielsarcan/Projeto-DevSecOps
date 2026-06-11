@@ -1,0 +1,118 @@
+# NetworkPolicies para segurança de rede.
+# Garantem que apenas o tráfego necessário é permitido entre os serviços.
+# Nenhuma porta além de 80 (redirect) e 443 (TLS) é exposta externamente.
+
+---
+# Frontend: aceita tráfego somente do Ingress Controller
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: frontend-policy
+  namespace: mkjs
+  labels:
+    app.kubernetes.io/part-of: mkjs
+    app.kubernetes.io/component: network
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: frontend
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Permite tráfego do Ingress Controller (namespace ingress-nginx)
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    # Permite DNS para resolução de nomes
+    - to: []
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+
+---
+# Backend: aceita tráfego do Ingress Controller (Socket.IO)
+# e pode acessar somente o PostgreSQL
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backend-policy
+  namespace: mkjs
+  labels:
+    app.kubernetes.io/part-of: mkjs
+    app.kubernetes.io/component: network
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: backend
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Permite tráfego do Ingress Controller
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 55555
+  egress:
+    # Permite acesso ao PostgreSQL
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postgres
+      ports:
+        - protocol: TCP
+          port: 5432
+    # Permite DNS para resolução de nomes
+    - to: []
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+
+---
+# PostgreSQL: aceita tráfego somente do backend.
+# Nenhum acesso externo ou egresso para a internet.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: postgres-policy
+  namespace: mkjs
+  labels:
+    app.kubernetes.io/part-of: mkjs
+    app.kubernetes.io/component: network
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: postgres
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Somente o backend pode acessar o PostgreSQL
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: backend
+      ports:
+        - protocol: TCP
+          port: 5432
+  egress:
+    # Permite DNS para resolução de nomes
+    - to: []
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53

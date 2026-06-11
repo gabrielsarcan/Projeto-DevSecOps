@@ -116,5 +116,49 @@ Para provisionar a infraestrutura via [Terraform](https://developer.hashicorp.co
    terraform destroy
    ```
 
-Boa sorte!
+### Deploy Contínuo (CD)
 
+O pipeline de CD é acionado automaticamente em cada push na branch `main` e realiza:
+
+1. **Build** das imagens Docker do frontend e backend.
+2. **Publicação** no GitHub Container Registry (GHCR):
+   - `ghcr.io/gabrielsarcan/mkjs-frontend:latest`
+   - `ghcr.io/gabrielsarcan/mkjs-backend:latest`
+3. **Tags** com SHA do commit para rastreabilidade.
+
+O workflow está em `.github/workflows/cd.yml` e utiliza o `GITHUB_TOKEN` nativo para autenticação no GHCR.
+
+### HTTPS via Cert-Manager
+
+Para habilitar HTTPS com certificados TLS automáticos via Let's Encrypt:
+
+1. Instale o cert-manager no cluster:
+   ```bash
+   kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.yaml
+   ```
+
+2. Aplique o ClusterIssuer e o Certificate:
+   ```bash
+   kubectl apply -f k8s/cert-manager-issuer.yaml
+   kubectl apply -f k8s/certificate.yaml
+   ```
+
+3. O Ingress já está configurado para:
+   - Terminar TLS com o certificado emitido automaticamente.
+   - **Redirecionar HTTP (porta 80) para HTTPS (porta 443)** automaticamente.
+
+4. Aplique as NetworkPolicies para segurança de rede:
+   ```bash
+   kubectl apply -f k8s/network-policy.yaml
+   ```
+
+### Segurança de Rede
+
+As `NetworkPolicies` garantem que:
+
+- **Frontend**: aceita tráfego somente do Ingress Controller (nginx).
+- **Backend**: aceita tráfego somente do Ingress Controller e só pode acessar o PostgreSQL.
+- **PostgreSQL**: aceita tráfego **somente do backend**. Nenhuma porta exposta para fora da rede de containers.
+- **Externamente**: apenas as portas 80 (redirect) e 443 (HTTPS) são acessíveis.
+
+Boa sorte!

@@ -1,0 +1,25 @@
+# ClusterIssuer para emissão automática de certificados TLS via Let's Encrypt.
+# Utiliza o desafio HTTP-01 com o Ingress Controller Nginx.
+#
+# Pré-requisito: cert-manager deve estar instalado no cluster.
+# Instalação: kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.yaml
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+  labels:
+    app.kubernetes.io/part-of: mkjs
+    app.kubernetes.io/component: tls
+spec:
+  acme:
+    # Servidor de produção do Let's Encrypt
+    server: https://acme-v02.api.letsencrypt.org/directory
+    # E-mail para notificações de expiração de certificados
+    # TODO(security): Substitua pelo e-mail real do administrador
+    email: admin@mkjs.local
+    privateKeySecretRef:
+      name: letsencrypt-prod-account-key
+    solvers:
+      - http01:
+          ingress:
+            ingressClassName: nginx

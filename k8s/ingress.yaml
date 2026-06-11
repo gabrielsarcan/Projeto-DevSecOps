@@ -7,6 +7,12 @@ metadata:
     app.kubernetes.io/part-of: mkjs
     app.kubernetes.io/component: ingress
   annotations:
+    # Cert-Manager: solicita certificado TLS automaticamente
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # Redireciona HTTP (porta 80) para HTTPS (porta 443)
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    # Timeouts para WebSocket
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     # Habilita suporte a WebSocket para o Socket.IO do backend
@@ -16,6 +22,10 @@ metadata:
       proxy_set_header Connection "upgrade";
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - mkjs.local
+      secretName: mkjs-tls
   rules:
     - host: mkjs.local
       http:
