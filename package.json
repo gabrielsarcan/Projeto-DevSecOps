@@ -1,0 +1,27 @@
+{
+  "name": "projeto-devsecops",
+  "version": "1.0.0",
+  "description": "Os conhecimentos de Gerência de Configuração e Evolução de Software (GCES) são fundamentais no ciclo de vida de um produto de software moderno. Este trabalho tem como objetivo exercitar os conceitos de automação, isolamento de ambiente, testes, segurança (DevSecOps) e deploy contínuo.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabrielsarcan/Projeto-DevSecOps.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/gabrielsarcan/Projeto-DevSecOps/issues"
+  },
+  "homepage": "https://github.com/gabrielsarcan/Projeto-DevSecOps#readme",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.4.1",
+    "eslint-plugin-security": "^4.0.0",
+    "globals": "^17.6.0"
+  }
+}

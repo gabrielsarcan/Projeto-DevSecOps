@@ -800,7 +800,7 @@
   mk.moves.Move.prototype._action = function () {};
 
   mk.moves.Move.prototype._nextStep = function (callback) {
-    var img = document.createElement('img'),
+    var img,
       conf = mk.config;
 
     img = this._steps[this.owner.getOrientation()][this._currentStep];

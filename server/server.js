@@ -1,7 +1,7 @@
 var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
-    io = require('socket.io')(server),
+    socketIo = require('socket.io')(server),
     GameCollection = require('./games.js').GameCollection,
     games = new GameCollection(),
     { Client } = require('pg');
@@ -39,7 +39,7 @@ var Responses = {
     JOIN_GAME: 'join-game'
   };
 
-io.sockets.on('connection', function (socket) {
+socketIo.sockets.on('connection', function (socket) {
   socket.on(Requests.CREATE_GAME, function (gameName) {
     if (games.createGame(gameName)) {
       games.getGame(gameName).addPlayer(socket);
