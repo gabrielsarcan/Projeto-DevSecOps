@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mkjs-ingress
+  namespace: mkjs
+  labels:
+    app.kubernetes.io/part-of: mkjs
+    app.kubernetes.io/component: ingress
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    # Habilita suporte a WebSocket para o Socket.IO do backend
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: mkjs.local
+      http:
+        paths:
+          # Rota do Socket.IO para o backend
+          - path: /socket.io
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 55555
+          # Todas as outras rotas para o frontend
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 8080

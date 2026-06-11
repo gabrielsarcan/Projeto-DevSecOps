@@ -54,4 +54,67 @@ Para visualizar o projeto em um ambiente otimizado para produção, onde o front
 2. O jogo em produção (Frontend via Nginx) estará disponível em `http://localhost`.
 3. O backend em produção responderá em `http://localhost:55555`.
 
+### Kubernetes (Minikube)
+
+Para orquestrar a aplicação em um cluster Kubernetes local com [Minikube](https://minikube.sigs.k8s.io/docs/start/):
+
+1. Inicie o Minikube e habilite o Ingress Controller:
+   ```bash
+   minikube start
+   minikube addons enable ingress
+   ```
+
+2. Configure o Docker para usar o ambiente do Minikube e construa as imagens:
+   ```bash
+   eval $(minikube docker-env)
+   docker build -t mkjs-frontend:latest ./game
+   docker build -t mkjs-backend:latest ./server
+   ```
+
+3. Aplique os manifestos do Kubernetes:
+   ```bash
+   kubectl apply -f k8s/namespace.yaml
+   kubectl apply -f k8s/postgres-secret.yaml
+   kubectl apply -f k8s/postgres-pvc.yaml
+   kubectl apply -f k8s/postgres-deployment.yaml
+   kubectl apply -f k8s/postgres-service.yaml
+   kubectl apply -f k8s/backend-deployment.yaml
+   kubectl apply -f k8s/backend-service.yaml
+   kubectl apply -f k8s/frontend-deployment.yaml
+   kubectl apply -f k8s/frontend-service.yaml
+   kubectl apply -f k8s/ingress.yaml
+   ```
+
+4. Adicione o hostname ao `/etc/hosts`:
+   ```bash
+   echo "$(minikube ip) mkjs.local" | sudo tee -a /etc/hosts
+   ```
+
+5. Acesse a aplicação em `http://mkjs.local`.
+
+6. Para verificar o status dos pods:
+   ```bash
+   kubectl get pods -n mkjs
+   ```
+
+### Terraform (Opcional)
+
+Para provisionar a infraestrutura via [Terraform](https://developer.hashicorp.com/terraform/install):
+
+1. Certifique-se de que o Minikube está rodando e as imagens foram construídas (passos 1-2 acima).
+
+2. Inicialize e aplique o Terraform:
+   ```bash
+   cd terraform
+   terraform init
+   terraform plan
+   terraform apply
+   ```
+
+3. Para destruir a infraestrutura:
+   ```bash
+   terraform destroy
+   ```
+
 Boa sorte!
+
